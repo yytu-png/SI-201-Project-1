@@ -15,8 +15,16 @@ def read_csv(file_path):
 
     return data
 
-if __name__ == "__main__":
+
+
+
+
+
+def main():
     file_path = "SampleSuperstore.csv"
     dataset = read_csv(file_path)
+    print("Dataset loaded successfully.")
+
+if __name__ == "__main__":
+    main()
     
-    print(dataset[0])

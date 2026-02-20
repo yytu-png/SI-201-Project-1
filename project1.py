@@ -35,13 +35,6 @@ def conditional_probability(dataset, category1, value1, category2, value2):
         return 0  
     return count_both / count_category1
 
-def check_independence(dataset, category1, value1, category2, value2):
-    p_category1 = len(sublist(dataset, category1, value1)) / len(dataset)
-    p_category2 = len(sublist(dataset, category2, value2)) / len(dataset)
-    p_both = len(sublist(sublist(dataset, category1, value1), category2, value2)) / len(dataset)
-
-    stats = (p_both, p_category1, p_category2)
-    return abs(p_both - (p_category1 * p_category2)) < 0.01, stats 
 
 def write_output():
     pass
@@ -51,35 +44,23 @@ def main():
     dataset = read_csv(file_path)
 
 
-    answer = []
-    stats = []
+    answer = [] 
     while True :
-        inq = input("Input query \" category1 = value1 | category2 = value2 \" to check independence \npress enter to do default computation. input exit to exit\n").strip()
+        inq = input("Input query \" category1 = value1 | category2 = value2 \" to compute conditional probability \npress enter to do default computation. input exit to exit\n").strip()
         if inq == "":
-            check_independence_result = check_independence(dataset, "Ship Mode", "Second Class", "Segment", "Consumer")
-            if check_independence_result:
-                answer.append("Ship Mode = Second Class and Segment = Consumer are independent.")
-            else:
-                answer.append("Ship Mode = Second Class and Segment = Consumer are not independent.")
+            result = conditional_probability(dataset, "Ship Mode", "Second Class", "Segment", "Consumer")
+            answer.append(f"Conditional probability: {result}")
             print(answer[-1])
             break
         elif inq == "exit":
             break
         else:
             try:
-                parts = inq.split('|')
-
-                category1, value1 = parts[0].strip().split('=', 1)
-                category2, value2 = parts[1].strip().split('=', 1)
-                category1, value1 = category1.strip(), value1.strip()
-                category2, value2 = category2.strip(), value2.strip()
-                print(f"Checking independence for {category1} = {value1} and {category2} = {value2}...")
-                check_independence_result, stat = check_independence(dataset, category1, value1, category2, value2)
-                if check_independence_result:
-                    answer.append(f"{category1} = {value1} and {category2} = {value2} are independent.")
-                else:
-                    answer.append(f"{category1} = {value1} and {category2} = {value2} are not independent.")
-                stats.append(stat)
+                category1, value1, category2, value2 = inq.replace(" ", "").split("|")
+                category1, value1 = category1.split("=")
+                category2, value2 = category2.split("=")
+                result = conditional_probability(dataset, category1, value1, category2, value2)
+                answer.append(f"Conditional probability: {result}")
                 print(answer[-1])
             except Exception as e:                
                 print("Invalid input format. Please try again.")

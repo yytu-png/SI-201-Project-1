@@ -39,6 +39,18 @@ def conditional_probability(dataset, category1, value1, category2, value2):
 def write_output():
     pass
 
+def continuous_sublist(dataset, category1, lower_bound, upper_bound):
+    sublist = []
+    total = len(dataset)
+    for row in dataset:
+        value = float(row[category1])
+        if lower_bound <= value <= upper_bound:
+            sublist.append(row)
+    
+    return sublist
+
+
+
 def main():
     file_path = "SampleSuperstore.csv"
     dataset = read_csv(file_path)

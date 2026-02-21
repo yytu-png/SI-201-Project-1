@@ -1,5 +1,5 @@
 import csv
-
+import unittest
 
 
 def read_csv(file_path):
@@ -110,7 +110,7 @@ def main():
             print("probability of Ship Mode being Second Class given Segment is Consumer:", result)
             result = conditional_probability(dataset, "Ship Mode", "Second Class", "Second Class", "Profit", 15.0, -1)
             answer.append(("Ship Mode", "Second Class", "Profit", "[15.0,-1]" , result, None))
-            print("probability of Ship Mode being Second Class given Profit is greater than 15.0:")
+            print("probability of Ship Mode being Second Class given Profit is greater than 15.0:", result)
             break
         elif inq == "exit":
             break
@@ -179,6 +179,40 @@ def main():
     print("\nSummary of results is printed in output.txt")
     write_output(answer)
 
+
+
+
+class TestProbabilityFunctions(unittest.TestCase):
+    def setUp(self):
+        self.dataset = [
+            {"Category": "A", "Value": "1"},
+            {"Category": "A", "Value": "2"},
+            {"Category": "B", "Value": "1"},
+            {"Category": "B", "Value": "2"},
+            {"Category": "C", "Value": "1"}
+        ]
+        self.dataset2 = [
+            {"Category": "A", "Value": "1"},
+            {"Category": "A", "Value": "2"},
+            {"Category": "B", "Value": "1"},
+            {"Category": "B", "Value": "2"},
+            {"Category": "C", "Value": "1"}
+        ]
+
+    def test_probability(self):
+        self.assertEqual(probability(self.dataset, "Category", "A"), 0.4)
+        self.assertEqual(probability(self.dataset, "Category", "B"), 0.4)
+        self.assertEqual(probability(self.dataset, "Category", "C"), 0.2)
+        self.assertEqual(probability(self.dataset, "Category", "D"), 0.0)
+
+    def test_conditional_probability1(self):
+        self.assertEqual(conditional_probability(self.dataset, "Category", "A", "Value", "1"), 0.5)
+        self.assertEqual(conditional_probability(self.dataset, "Category", "B", "Value", "1"), 0.5)
+    
+    def test_conditional_probability2(self):
+        self.assertEqual(conditional_probability(self.dataset2, "Value", 1, 2, "Category", "A", "A", True, True, True, True), 0.4)
+        
+    
 if __name__ == "__main__":
     main()
-    
+    unittest.main()
